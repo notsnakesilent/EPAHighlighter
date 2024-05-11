@@ -1,0 +1,223 @@
+{
+  "name": "Pseudocode",
+  "scopeName": "source.epa",
+  "foldingStartMarker": "(\\{|\\()",
+  "foldingEndMarker": "(\\}|\\))",
+  "fileTypes": [
+    "epa"
+  ],
+  "patterns": [
+    {
+      "include": "#code"
+    }
+  ],
+  "repository": {
+    "code": {
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#constants"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#blocks"
+        },
+        {
+          "include": "#vartypes"
+        },
+        {
+          "include": "#functions"
+        },
+        {
+          "include": "#variables"
+        },
+        {
+          "include": "#variables-after-aritmetic-operator"
+        },
+        {
+          "include": "#variables-single-char"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+					"begin": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.leading.pscd"
+						},
+						"2": {
+							"name": "comment.line.double-slash.pscd"
+						},
+						"3": {
+							"name": "punctuation.definition.comment.pscd"
+						},
+						"4": {
+							"name": "storage.type.internaldeclaration.pscd"
+						},
+						"5": {
+							"name": "punctuation.decorator.internaldeclaration.pscd"
+						}
+					},
+					"end": "(?=$)",
+					"contentName": "comment.line.double-slash.pscd"
+        },
+        {
+          "name": "comment.block.empty.pscd",
+          "match": "\\(\\*\\*\\)",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.pscd"
+            }
+          }
+        },
+        {
+          "name": "comment.block.pscd",
+          "begin": "\\(\\*",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.pscd"
+            }
+          },
+          "end": "\\*\\)"
+        },
+        {
+          "name": "comment.block.empty.pscd",
+          "match": "/\\*\\*/",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.pscd"
+            }
+          }
+        },
+        {
+          "name": "comment.block.pscd",
+          "begin": "/\\*",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.pscd"
+            }
+          },
+          "end": "\\*/"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.numeric.pscd",
+          "match": "\\b(?<![\\.0-9])([0-9]+)(?![\\.0-9])\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.pscd",
+          "match": "(?i)(\\s++[oOyY]\\s++|\\s++[Nn]o\\s++)"
+        },
+        {
+          "name": "keyword.operator.relational.pscd",
+          "match": "<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.comparison.pscd",
+          "match": "=|<>"
+        },
+        {
+          "name": "keyword.operator.arithmetic.pscd",
+          "match": "(?<!/)\\*\\*|(?<!\\*)/(?!/|\\*)|%|\\*(?<!/\\*)(?!/([^\\*]|$))|\\+|-|\\sdiv\\s++|\\smod\\s++"
+        },
+        {
+          "name": "keyword.operator.assignment.pscd",
+          "match": "(<-|←|\\s*=>\\s*|\\:\\=|,)"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.pscd",
+          "begin": "\"|“",
+          "end": "\"|”",
+          "patterns": [
+            {
+              "name": "constant.character.escape.pscd",
+              "match": "([\"|“|”])(?:(?=(\\\\?))\\2.)*?\\1"
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.pscd",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.pscd",
+              "match": "(['])(?:(?=(\\\\?))\\2.)*?\\1"
+            }
+          ]
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.pscd",
+          "match": "(?i)\\b(?<=^|[\\s\\{\\}\\;\\:]|\\*\\\/)(Algoritmo|Subalgoritmo|Procedimiento|Funci[oó]n|Inicio|Excepci[oó]n|Excepci[oó]nes|lanzar|verdadero|falso|null|nada|cuando|registro|cdo|(\\(|,|;)\\s*E\\s\\s*|(\\(|,|;)\\s*E\\/S\\s\\s*|Fin\\s*\\n|Const|Var|Tipos|Fin(?!\\s(Si|Desde|Hasta|Mientras|seg[u\u00FA]n)))\\b"
+        }
+      ]
+    },
+    "blocks": {
+      "patterns": [
+        {
+          "name": "keyword.control.conditional.pscd",
+          "match": "(?i)\\b(?<=^|[\\s\\{\\}\\;\\:]|\\*\\\/)(Si|Si\\s*No|Entonces|Desde|Con\\s*Paso|Hacer|Repetir|retornar|retorna|Hasta|Mientras|Seg[u\u00FA]n|Fin(\\s*(Si|Desde|Mientras|Repetir|Seg[u\u00FA]n)))\\b"
+        }
+      ]
+    },
+    "vartypes": {
+      "patterns": [
+        {
+          "name": "support.class.builtin.pscd",
+          "match": "(?i):\\s*(Car[a\u00E1]cter|Cadena|Real|Entero|L[\u00F3o]gico|Booleano|arreglo|tipo\\w*)"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.pscd",
+          "match": "(?<![)@.$#\u00B4\"'\\]-~\\\\])([A-Za-z_]\\w*)(?=\\(|\\s++\\()"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.pscd",
+          "match": "(?i)(\\b[A-Za-z][a-zA-Z0-9_]+\\b)(?=\\s*[:,<>=\\-+*)]|\\No\\s++|\\s\\s*[oOyY]|\\[)"
+        } 
+      ]
+    },
+    "variables-after-aritmetic-operator": {
+      "patterns": [
+        {
+          "name": "variable.other.pscd",
+          "match": "((,|\\()\\s*[a-zA-Z0-9_]*\\.*[a-zA-Z0-9_]*\\s*(,|\\)))"
+        } 
+      ]
+    }
+  }
+}
