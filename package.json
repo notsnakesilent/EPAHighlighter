@@ -12,7 +12,7 @@
   "author": "Brian Walker",
   "license": "MIT",
 	"engines": {
-		"vscode": "^1.89.0"
+		"vscode": "^1.10.0"
 	},
 	"categories": [
 		"Other"
@@ -20,6 +20,12 @@
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
+		"commands": [
+			{
+			  "command": "extension.activate",
+			  "title": "Activate EPAHighlighter Extension",
+			  "category": "Tools"
+			}],
 		"languages": [
 			{
 				"id": "epa",
@@ -56,7 +62,7 @@
 		"test": "vscode-test"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.89.0",
+		"@types/vscode": "^1.10.0",
 		"@types/mocha": "^10.0.6",
 		"@types/node": "18.x",
 		"@typescript-eslint/eslint-plugin": "^7.7.1",
