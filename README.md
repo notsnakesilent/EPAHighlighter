@@ -15,7 +15,7 @@ En resumen, esta extensión está diseñada para mejorar la experiencia de desar
 ## Instalación
 [Instalacion](https://youtu.be/CepviNt__lw?si=jEg9e8MHgU-SUNQJ&t=95)
  
-[Archivo .vsix](https://github.com/notsnakesilent/EPAHighlighter/releases/download/Release/EPAHighlighter-1.1.0.vsix)
+[Archivo .vsix](https://github.com/notsnakesilent/EPAHighlighter/releases/download/1.1.0/EPAHighlighter-1.1.0.vsix)
 
 ## Uso
 Se deben utilizar archivos con extension ".epa" si no la extension no se activara
