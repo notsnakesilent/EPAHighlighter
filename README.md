@@ -94,6 +94,11 @@ Muestra visualmente dónde comienzan y terminan los bloques de código, como SI,
 
 ![image](https://github.com/notsnakesilent/EPAHighlighter/assets/69158149/ac1d8a7b-f263-4202-bb17-0ae2c9e90ab9)
 
+## Definiciones de SubAlgoritmos
+
+![image](https://github.com/notsnakesilent/EPAHighlighter/assets/69158149/b5e8ea2a-6c9c-4a91-9dbf-38004db0e305)
+
+
 ## Agradecimientos
 
 https://github.com/TextC0de/vscode-pseudocodigo-extension [Snippets y Sintaxis]
