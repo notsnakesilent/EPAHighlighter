@@ -6,8 +6,22 @@ let desdeStack: { line: number; indent: number; text: string }[] = [];
 let mientrasStack: { line: number; indent: number; text: string }[] = [];
 let segunStack: { line: number; indent: number; text: string }[] = [];
 let diagnosticCollection: vscode.DiagnosticCollection;
+let lebabOutputChannel: vscode.OutputChannel | undefined;
+const subAlgoritmos: { [key: string]: number } = {};
+const subAlgoritmosParams: { [key: string]: { E: string[], S: string[] } } = {};
+
+
+
 
 export function activate(context: vscode.ExtensionContext) {
+
+
+
+
+    if (!lebabOutputChannel) {
+        lebabOutputChannel = vscode.window.createOutputChannel('EPAHighlighter');
+	}
+	
 	diagnosticCollection =
 		vscode.languages.createDiagnosticCollection("myExtension");
 
@@ -36,7 +50,10 @@ export function activate(context: vscode.ExtensionContext) {
 		null,
 		context.subscriptions
 	);
+			
 }
+
+
 
 function updateDecoration(editor: vscode.TextEditor) {
 	const document = editor.document;
@@ -93,6 +110,7 @@ function decorateLines(
 				text,
 			}); 
 		}
+		
 
 		else if (
 			text.toLowerCase().startsWith("FIN DESDE".toLowerCase()) ||
@@ -155,6 +173,60 @@ function decorateLines(
 				text,
 			});
 		}
+
+			else if (text.toLowerCase().startsWith("subalgoritmo ".toLowerCase())) {
+				const subAlgoritmoNameMatch = text.match(/subalgoritmo\s+(\w+)/i);
+				const paramsMatch = text.match(/\((.*)\)/);
+				if (subAlgoritmoNameMatch && subAlgoritmoNameMatch[1] && paramsMatch && paramsMatch[1]) {
+					const subAlgoritmoName = subAlgoritmoNameMatch[1];
+					subAlgoritmos[subAlgoritmoName] = lineIndex; 
+
+					const params = paramsMatch[1].split(',').map(param => param.trim());
+					const EParams: string[] = [];
+					const SParams: string[] = [];
+					let currentSection = '';
+	
+					params.forEach(param => {
+						if (param.toLowerCase().startsWith('e ')) {
+							currentSection = 'E';
+						} else if (param.toLowerCase().startsWith('s ')) {
+							currentSection = 'S';
+						}
+	
+						if (currentSection === 'E') {
+							EParams.push(param.replace(/^E\s*/, ''));
+						} else if (currentSection === 'S') {
+							SParams.push(param.replace(/^S\s*/, ''));
+						}
+					});
+	
+					subAlgoritmosParams[subAlgoritmoName] = { E: EParams, S: SParams };
+				}
+			}
+
+			else {
+				const subAlgoritmoCallMatch = text.match(/(\w+)\s*\(/);
+				if (subAlgoritmoCallMatch && subAlgoritmoCallMatch[1]) {
+					const subAlgoritmoName = subAlgoritmoCallMatch[1];
+					const declarationLine = subAlgoritmos[subAlgoritmoName];
+					if (declarationLine !== undefined) {
+
+						
+
+						const decoration = {
+							range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
+							
+							hoverMessage: `Declarado en la línea ${declarationLine + 1}.\n` +
+								`Parámetros de entrada: ${subAlgoritmosParams[subAlgoritmoName].E.join(', ')}.\n` +
+								`Parámetros de salida: ${subAlgoritmosParams[subAlgoritmoName].S.join(', ')}.`,
+						};
+							lines.push(decoration);
+							
+						
+					}
+				}
+			}
+		
 
 		if (text.toLowerCase().includes("algoritmo")) {
 			const parts = text.split(" "); 
@@ -270,5 +342,14 @@ function decorateLines(
 	diagnosticCollection.set(document.uri, diagnostics);
 }
 
+function compiler() {
+
+	if (!lebabOutputChannel) {
+        lebabOutputChannel = vscode.window.createOutputChannel('EPAHighlighter');
+	}
+
+	
+
+}
 
 export function deactivate() {}
