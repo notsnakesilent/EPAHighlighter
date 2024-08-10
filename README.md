@@ -1,4 +1,4 @@
-# EPAHighlighter ![logo](https://github.com/user-attachments/assets/6b33858e-d0bc-4627-beb5-d6fbefebc9d4)
+# EPAHighlighter
 
 La extensión para Visual Studio Code "EPAHighlighter" está diseñada para brindar funcionalidades específicas para trabajar con Pseudocódigo según los estándares de la UNPSJB. Esta extensión ofrece las siguientes características:
 
