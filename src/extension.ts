@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import * as fs from 'fs';
+import * as path from 'path';
 
 let connectionDecorationType: vscode.TextEditorDecorationType | undefined;
 let siStack: { line: number; indent: number; text: string }[] = [];
@@ -9,14 +11,17 @@ let diagnosticCollection: vscode.DiagnosticCollection;
 let lebabOutputChannel: vscode.OutputChannel | undefined;
 const subAlgoritmos: { [key: string]: number } = {};
 const subAlgoritmosParams: { [key: string]: { E: string[], S: string[] } } = {};
+const functionCallRegex = /(?:\d+\s*:)?\s*([a-zA-Z_]\w*)\s*\(/g;
 
 
 
-
-export function activate(context: vscode.ExtensionContext) {
-
+export async function activate(context: vscode.ExtensionContext) {
 
 
+
+	let disposable = vscode.commands.registerCommand('extension.helpmode', () => {
+        modifySnippet();
+    });
 
     if (!lebabOutputChannel) {
         lebabOutputChannel = vscode.window.createOutputChannel('EPAHighlighter');
@@ -38,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 		},
 		null,
 		context.subscriptions
-	);
+	);		
 
 	vscode.workspace.onDidChangeTextDocument(
 		(event) => {
@@ -53,7 +58,112 @@ export function activate(context: vscode.ExtensionContext) {
 			
 }
 
+async function modifySnippet() {
 
+	const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('No active text editor found.');
+        return;
+    }
+
+    const document = editor.document;
+    const filePath = document.uri.fsPath;
+    const fileExt = path.extname(filePath);
+
+	  if (fileExt === '.epah') {
+		
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showInformationMessage('No active text editor found.');
+			return;
+		}
+	
+		const newFilePath = filePath.replace(/\.[^/.]+$/, '.epa'); 
+
+		const result = await vscode.window.showInformationMessage(
+			'Queres desactivar el HelpMode? Esto cambiara la extension del archivo de .epah a .epa. El historial de Ctrl+Z y similares se borrara',
+			'Si',
+			'No'
+		);
+	
+		if (result === 'Si') {
+			try {
+
+				await document.save();
+				fs.writeFileSync(newFilePath, document.getText(), 'utf8');
+				
+			
+				fs.unlinkSync(filePath);
+				
+
+				vscode.window.showInformationMessage('File saved as .epa and original file deleted.');
+				
+				const newDocument = await vscode.workspace.openTextDocument(newFilePath);
+				await vscode.window.showTextDocument(newDocument);
+	
+				const oldEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.fsPath === filePath);
+				if (oldEditor) {
+					await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+				}
+
+				await vscode.commands.executeCommand('workbench.action.reloadWindow');
+			} catch (error) {
+				vscode.window.showErrorMessage(`Error`);
+			}
+		} else {
+			vscode.window.showInformationMessage('Operacion cancelada.');
+		}
+	}
+	else if (fileExt === '.epa') {
+
+
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showInformationMessage('No active text editor found.');
+			return;
+		}
+		const document = editor.document;
+		const filePath = document.uri.fsPath;
+		const newFilePath = filePath.replace(/\.[^/.]+$/, '.epah'); 
+
+		const result = await vscode.window.showInformationMessage(
+			'Queres activar el HelpMode? Esto cambiara la extension del archivo de .epa a .epah. El historial de Ctrl+Z y similares se borrara',
+			'Si',
+			'No'
+		);
+	
+		if (result === 'Si') {
+			try {
+
+				await document.save();
+				fs.writeFileSync(newFilePath, document.getText(), 'utf8');
+				
+			
+				fs.unlinkSync(filePath);
+				
+
+				vscode.window.showInformationMessage('File saved as .epah and original file deleted.');
+				
+				const newDocument = await vscode.workspace.openTextDocument(newFilePath);
+				await vscode.window.showTextDocument(newDocument);
+	
+				const oldEditor = vscode.window.visibleTextEditors.find(e => e.document.uri.fsPath === filePath);
+				if (oldEditor) {
+					await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+				}
+
+				await vscode.commands.executeCommand('workbench.action.reloadWindow');
+			} catch (error) {
+				vscode.window.showErrorMessage(`Error`);
+			}
+		} else {
+			vscode.window.showInformationMessage('Operation cancelada.');
+		}
+	
+
+	}
+	
+}
 
 function updateDecoration(editor: vscode.TextEditor) {
 	const document = editor.document;
@@ -174,58 +284,28 @@ function decorateLines(
 			});
 		}
 
-			else if (text.toLowerCase().startsWith("subalgoritmo ".toLowerCase())) {
-				const subAlgoritmoNameMatch = text.match(/subalgoritmo\s+(\w+)/i);
-				const paramsMatch = text.match(/\((.*)\)/);
-				if (subAlgoritmoNameMatch && subAlgoritmoNameMatch[1] && paramsMatch && paramsMatch[1]) {
-					const subAlgoritmoName = subAlgoritmoNameMatch[1];
-					subAlgoritmos[subAlgoritmoName] = lineIndex; 
-
-					const params = paramsMatch[1].split(',').map(param => param.trim());
-					const EParams: string[] = [];
-					const SParams: string[] = [];
-					let currentSection = '';
-	
-					params.forEach(param => {
-						if (param.toLowerCase().startsWith('e ')) {
-							currentSection = 'E';
-						} else if (param.toLowerCase().startsWith('s ')) {
-							currentSection = 'S';
-						}
-	
-						if (currentSection === 'E') {
-							EParams.push(param.replace(/^E\s*/, ''));
-						} else if (currentSection === 'S') {
-							SParams.push(param.replace(/^S\s*/, ''));
-						}
-					});
-	
-					subAlgoritmosParams[subAlgoritmoName] = { E: EParams, S: SParams };
-				}
-			}
-
-			else {
-				const subAlgoritmoCallMatch = text.match(/(\w+)\s*\(/);
-				if (subAlgoritmoCallMatch && subAlgoritmoCallMatch[1]) {
-					const subAlgoritmoName = subAlgoritmoCallMatch[1];
-					const declarationLine = subAlgoritmos[subAlgoritmoName];
-					if (declarationLine !== undefined) {
-
-						
-
-						const decoration = {
-							range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-							
-							hoverMessage: `Declarado en la línea ${declarationLine + 1}.\n` +
-								`Parámetros de entrada: ${subAlgoritmosParams[subAlgoritmoName].E.join(', ')}.\n` +
-								`Parámetros de salida: ${subAlgoritmosParams[subAlgoritmoName].S.join(', ')}.`,
-						};
-							lines.push(decoration);
-							
-						
-					}
-				}
-			}
+		else if (text.toLowerCase().startsWith("subalgoritmo ".toLowerCase())) {
+            const subAlgoritmoNameMatch = text.match(/subalgoritmo\s+(\w+)/i);
+            if (subAlgoritmoNameMatch && subAlgoritmoNameMatch[1]) {
+                const subAlgoritmoName = subAlgoritmoNameMatch[1];
+                subAlgoritmos[subAlgoritmoName] = lineIndex; // Guardar la línea de la declaración
+            }
+        }
+        // Detectar llamadas a subalgoritmos
+        else {
+            let match;
+            while ((match = functionCallRegex.exec(text)) !== null) {
+                const functionName = match[1];
+                const declarationLine = subAlgoritmos[functionName];
+                if (declarationLine !== undefined) {
+                    const hoverMessage = `Declarado en la línea ${declarationLine + 1}.`;
+                    const decoration = {
+                        range: new vscode.Range(lineIndex, match.index, lineIndex, match.index + match[0].length),
+                        hoverMessage,
+                    };
+                    lines.push(decoration);
+                }
+            }
 		
 
 		if (text.toLowerCase().includes("algoritmo")) {
@@ -341,14 +421,13 @@ function decorateLines(
 
 	diagnosticCollection.set(document.uri, diagnostics);
 }
+}
 
 function compiler() {
 
 	if (!lebabOutputChannel) {
         lebabOutputChannel = vscode.window.createOutputChannel('EPAHighlighter');
 	}
-
-	
 
 }
 
