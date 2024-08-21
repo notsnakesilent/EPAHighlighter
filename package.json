@@ -2,7 +2,7 @@
   "name": "EPAHighlighter",
   "displayName": "EPAHighlighter",
   "description": "Extension de VSCode para dar sintaxis , inclusion de snippets, un checkeo de errores simple y determinacion de bloques para Pseudocódigo según los estándares de la UNPSJB",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/notsnakesilent/EPAHighlighter"
@@ -13,6 +13,7 @@
     "Programación",
     "UNPSJB"
   ],
+  "icon": "images/logo.png",
   "publisher": "BrianWalker",
   "author": "Brian Walker",
   "license": "MIT",
