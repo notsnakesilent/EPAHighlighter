@@ -190,237 +190,139 @@ function updateDecoration(editor: vscode.TextEditor) {
 }
 
 function decorateLines(
-	document: vscode.TextDocument,
-	startLine: number,
-	lines: vscode.DecorationOptions[]
+    document: vscode.TextDocument,
+    startLine: number,
+    lines: vscode.DecorationOptions[]
 ) {
-	let lineIndex = startLine;
-	let diagnostics: vscode.Diagnostic[] = [];
+    let lineIndex = startLine;
+    let diagnostics: vscode.Diagnostic[] = [];
 
-	while (lineIndex < document.lineCount) {
-		const line = document.lineAt(lineIndex);
-		const text = line.text.trim();
+    while (lineIndex < document.lineCount) {
+        const line = document.lineAt(lineIndex);
+        const text = line.text.trim().toLowerCase();
+        const range = (start: number, end: number) => new vscode.Range(lineIndex, start, lineIndex, end);
 
-		if (
-			text.toLowerCase().startsWith("FIN SI".toLowerCase()) ||
-			text.toLowerCase().startsWith("FINSI".toLowerCase())
-		) {
-			const parentSi = siStack.pop();
-			if (parentSi) {
-				const decoration = {
-					range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					hoverMessage: `${parentSi.text} (Línea ${parentSi.line + 1})`, 
-				};
-				lines.push(decoration);
-			}
-		} else if (text.toLowerCase().startsWith("SI ".toLowerCase())) {
-			siStack.push({
-				line: lineIndex,
-				indent: line.firstNonWhitespaceCharacterIndex,
-				text,
-			}); 
-		}
-		
+        if (text.startsWith("fin si") || text.startsWith("finsi")) {
+            const parentSi = siStack.pop();
+            if (parentSi) {
+                lines.push({
+                    range: range(0, line.text.length),
+                    hoverMessage: `${parentSi.text} (Línea ${parentSi.line + 1})`
+                });
+            }
+        } else if (text.startsWith("si ")) {
+            siStack.push({ line: lineIndex, indent: line.firstNonWhitespaceCharacterIndex, text });
+        }
 
-		else if (
-			text.toLowerCase().startsWith("FIN DESDE".toLowerCase()) ||
-			text.toLowerCase().startsWith("FINDESDE".toLowerCase())
-		) {
-			const parentDesde = desdeStack.pop();
-			if (parentDesde) {
-				const decoration = {
-					range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					hoverMessage: `${parentDesde.text} (Línea ${parentDesde.line + 1})`, 
-				};
-				lines.push(decoration);
-			}
-		} else if (text.toLowerCase().startsWith("DESDE ".toLowerCase())) {
-			desdeStack.push({
-				line: lineIndex,
-				indent: line.firstNonWhitespaceCharacterIndex,
-				text,
-			}); 
-		}
+        if (text.startsWith("fin desde") || text.startsWith("findesde")) {
+            const parentDesde = desdeStack.pop();
+            if (parentDesde) {
+                lines.push({
+                    range: range(0, line.text.length),
+                    hoverMessage: `${parentDesde.text} (Línea ${parentDesde.line + 1})`
+                });
+            }
+        } else if (text.startsWith("desde ")) {
+            desdeStack.push({ line: lineIndex, indent: line.firstNonWhitespaceCharacterIndex, text });
+        }
 
-		else if (
-			text.toLowerCase().startsWith("FIN MIENTRAS".toLowerCase()) ||
-			text.toLowerCase().startsWith("FINMIENTRAS".toLowerCase())
-		) {
-			const parentMientras = mientrasStack.pop();
-			if (parentMientras) {
-				const decoration = {
-					range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					hoverMessage: `${parentMientras.text} (Línea ${
-						parentMientras.line + 1
-					})`, 
-				};
-				lines.push(decoration);
-			}
-		} else if (text.toLowerCase().startsWith("MIENTRAS ".toLowerCase())) {
-			mientrasStack.push({
-				line: lineIndex,
-				indent: line.firstNonWhitespaceCharacterIndex,
-				text,
-			}); 
-		}
+        if (text.startsWith("fin mientras") || text.startsWith("finmientras")) {
+            const parentMientras = mientrasStack.pop();
+            if (parentMientras) {
+                lines.push({
+                    range: range(0, line.text.length),
+                    hoverMessage: `${parentMientras.text} (Línea ${parentMientras.line + 1})`
+                });
+            }
+        } else if (text.startsWith("mientras ")) {
+            mientrasStack.push({ line: lineIndex, indent: line.firstNonWhitespaceCharacterIndex, text });
+        }
 
-		else if (
-			text.toLowerCase().startsWith("FIN SEGUN".toLowerCase()) ||
-			text.toLowerCase().startsWith("FINSEGUN".toLowerCase())
-		) {
-			const parentSegun = segunStack.pop();
-			if (parentSegun) {
-				const decoration = {
-					range: new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					hoverMessage: `${parentSegun.text} (Línea ${parentSegun.line + 1})`, 
-				};
-				lines.push(decoration);
-			}
-		} else if (text.toLowerCase().startsWith("SEGUN ".toLowerCase())) {
-			segunStack.push({
-				line: lineIndex,
-				indent: line.firstNonWhitespaceCharacterIndex,
-				text,
-			});
-		}
+        if (text.startsWith("fin segun") || text.startsWith("finsegun")) {
+            const parentSegun = segunStack.pop();
+            if (parentSegun) {
+                lines.push({
+                    range: range(0, line.text.length),
+                    hoverMessage: `${parentSegun.text} (Línea ${parentSegun.line + 1})`
+                });
+            }
+        } else if (text.startsWith("segun ")) {
+            segunStack.push({ line: lineIndex, indent: line.firstNonWhitespaceCharacterIndex, text });
+        }
 
-		else if (text.toLowerCase().startsWith("subalgoritmo ".toLowerCase())) {
+        if (text.startsWith("subalgoritmo ")) {
             const subAlgoritmoNameMatch = text.match(/subalgoritmo\s+(\w+)/i);
             if (subAlgoritmoNameMatch && subAlgoritmoNameMatch[1]) {
-                const subAlgoritmoName = subAlgoritmoNameMatch[1];
-                subAlgoritmos[subAlgoritmoName] = lineIndex; // Guardar la línea de la declaración
+                subAlgoritmos[subAlgoritmoNameMatch[1]] = lineIndex;
             }
-        }
-        // Detectar llamadas a subalgoritmos
-        else {
+        } else {
             let match;
             while ((match = functionCallRegex.exec(text)) !== null) {
                 const functionName = match[1];
                 const declarationLine = subAlgoritmos[functionName];
                 if (declarationLine !== undefined) {
-                    const hoverMessage = `Declarado en la línea ${declarationLine + 1}.`;
-                    const decoration = {
-                        range: new vscode.Range(lineIndex, match.index, lineIndex, match.index + match[0].length),
-                        hoverMessage,
-                    };
-                    lines.push(decoration);
+                    lines.push({
+                        range: range(match.index, match.index + match[0].length),
+                        hoverMessage: `Declarado en la línea ${declarationLine + 1}.`
+                    });
                 }
             }
-		
+        }
 
-		if (text.toLowerCase().includes("algoritmo")) {
-			const parts = text.split(" "); 
-			const index = parts.findIndex(
-				(part) => part.toLowerCase() === "algoritmo"
-			);
+        if (text.includes("algoritmo")) {
+            const parts = text.split(" ");
+            const index = parts.findIndex(part => part === "algoritmo");
+            if (index !== -1 && (parts.length === index + 1 || parts[index + 1].trim() === "")) {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: El algoritmo no tiene nombre", vscode.DiagnosticSeverity.Error));
+            } else if (index !== -1 && parts.length > index + 2) {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: El nombre del algoritmo no puede contener espacios", vscode.DiagnosticSeverity.Error));
+            }
+        }
 
-			if (
-				index !== -1 &&
-				(parts.length === index + 1 || parts[index + 1].trim() === "")
-			) {
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: El algoritmo no tiene nombre",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			} else if (index !== -1 && parts.length > index + 2) {
+        if (text.includes("<-") && text.indexOf("<-") === text.lastIndexOf("<-")) {
+            const [leftPart, rightPart] = text.split("<-").map(part => part.trim());
+            if (leftPart !== "" && rightPart === "") {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: Falta una definición de valor", vscode.DiagnosticSeverity.Error));
+            }
+        }
 
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: El nombre del algoritmo no puede contener espacios",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			}
-		}
+        const colonIndex = text.indexOf(":");
+        if (colonIndex !== -1) {
+            const leftPart = text.substring(0, colonIndex).trim();
+            const rightPart = text.substring(colonIndex + 1).trim();
+            if (leftPart !== "" && rightPart === "") {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: Falta la definición del tipo de variable", vscode.DiagnosticSeverity.Error));
+            } else if (leftPart === "" && rightPart !== "") {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: Falta el nombre de la variable", vscode.DiagnosticSeverity.Error));
+            } else if (leftPart === "" && rightPart === "") {
+                diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: Caracter desconocido", vscode.DiagnosticSeverity.Error));
+            }
+        }
 
-		if (text.includes("<-") && text.indexOf("<-") === text.lastIndexOf("<-")) {
-			const parts = text.split("<-");
-			const leftPart = parts[0].trim();
-			const rightPart = parts[1].trim();
-			if (leftPart !== "" && rightPart === "") {
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: Falta una definicion de valor",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			}
-		}
+        const operators = ['>=', '<>', '>', '<', '='];
+        for (const operator of operators) {
+            if (text.includes(operator)) {
+                const [leftPart, rightPart] = text.split(operator).map(part => part.trim());
+                if (leftPart !== "" && rightPart === "") {
+                    diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), `Error: Se espera algo después de '${operator}'`, vscode.DiagnosticSeverity.Error));
+                } else if (leftPart === "" && rightPart !== "") {
+                    diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), `Error: Se espera algo antes de '${operator}'`, vscode.DiagnosticSeverity.Error));
+                } else if (leftPart === "" && rightPart === "") {
+                    diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), `Error: Se espera algo antes y después de '${operator}'`, vscode.DiagnosticSeverity.Error));
+                }
+                break;
+            }
+        }
 
-		const colonIndex = text.indexOf(":"); 
-		if (colonIndex !== -1) {
-			const leftPart = text.substring(0, colonIndex).trim(); 
-			const rightPart = text.substring(colonIndex + 1).trim(); 
-			if (leftPart !== "" && rightPart === "") {
+        if (text.includes('=>')) {
+            diagnostics.push(new vscode.Diagnostic(range(0, line.text.length), "Error: '=>' no existe. ¿Querrás decir '>='?", vscode.DiagnosticSeverity.Error));
+        }
 
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: Falta la definicion del tipo de variable",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			} else if (leftPart === "" && rightPart !== "") {
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: Falta el nombre de la variable",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			} else if (leftPart === "" && rightPart === "") {
-				const diagnostic = new vscode.Diagnostic(
-					new vscode.Range(lineIndex, 0, lineIndex, line.text.length),
-					"Error: Caracter desconocido",
-					vscode.DiagnosticSeverity.Error
-				);
-				diagnostics.push(diagnostic);
-			}
-		}
+        lineIndex++;
+    }
 
-		if (text.includes('>') || text.includes('<') || text.includes('=') || text.includes('>=') || text.includes('=<')) {
-			let operator: string = '';
-			if (text.includes('>=')) {
-				operator = '>=';
-			} else if (text.includes('<>')) {
-				operator = '<>';
-			} else if (text.includes('>')) {
-				operator = '>';
-			} else if (text.includes('<')) {
-				operator = '<';
-			} else {
-				operator = '=';
-			}
-		
-			const parts = text.split(operator); 
-			const leftPart = parts[0].trim(); 
-			const rightPart = parts[1] ? parts[1].trim() : ''; 
-		
-			if (leftPart !== '' && rightPart === '') {
-				const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.text.length), `Error: Se espera algo después de '${operator}'`, vscode.DiagnosticSeverity.Error);
-				diagnostics.push(diagnostic);
-			} else if (leftPart === '' && rightPart !== '') {
-				const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.text.length), `Error: Se espera algo antes de '${operator}'`, vscode.DiagnosticSeverity.Error);
-				diagnostics.push(diagnostic);
-			} else if (leftPart === '' && rightPart === '') {
-				const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.text.length), `Error: Se espera algo antes y después de '${operator}'`, vscode.DiagnosticSeverity.Error);
-				diagnostics.push(diagnostic);
-			}
-
-			if (text.includes('=>')) {
-				const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.text.length), `Error: '=>' no existe. ¿Querrás decir '>='?`, vscode.DiagnosticSeverity.Error);
-				diagnostics.push(diagnostic);
-			} 
-		}
-
-		
-		lineIndex++;
-	}
-
-	diagnosticCollection.clear();
-
-	diagnosticCollection.set(document.uri, diagnostics);
-}
+    diagnosticCollection.clear();
+    diagnosticCollection.set(document.uri, diagnostics);
 }
 
 function compiler() {
