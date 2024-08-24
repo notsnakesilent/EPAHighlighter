@@ -18,7 +18,7 @@ En resumen, esta extensión está diseñada para mejorar la experiencia de desar
 [Archivo .vsix](https://github.com/notsnakesilent/EPAHighlighter/releases/download/1.1.0/EPAHighlighter-1.1.0.vsix)
 
 ## Uso
-Se deben utilizar archivos con extension ".epa" si no la extension no se activara
+Se deben utilizar archivos con extension ".epa/.epah/.pseudo/.pseudoh" si no la extension no se activara
 
 ## Snippets
 La extensión viene acompañada de algunos snippets que pueden ayudarte a escribir código más fácil y rápidamente. A continuación encontrarás una tabla que contiene las palabras clave de los snippets y su contenido.
@@ -97,6 +97,10 @@ Muestra visualmente dónde comienzan y terminan los bloques de código, como SI,
 ## Definiciones de SubAlgoritmos
 
 ![image](https://github.com/notsnakesilent/EPAHighlighter/assets/69158149/b5e8ea2a-6c9c-4a91-9dbf-38004db0e305)
+
+## Help Mode (Comenta y da una definicion sobre cada funcion)
+
+![356783763-444bd517-54f1-4f81-8e7d-d0686c1856d3](https://github.com/user-attachments/assets/91a5a26b-0583-493d-81bd-1b8f911dd781)
 
 
 ## Agradecimientos
