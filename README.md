@@ -21,7 +21,7 @@ En resumen, esta extensión está diseñada para mejorar la experiencia de desar
 Se deben utilizar archivos con extension ".epa/.epah/.pseudo/.pseudoh" si no la extension no se activara
 
 ## Snippets
-La extensión viene acompañada de algunos snippets que pueden ayudarte a escribir código más fácil y rápidamente. A continuación encontrarás una tabla que contiene las palabras clave de los snippets y su contenido.
+La extensión viene acompañada de algunos snippets que pueden ayudarte a escribir código más fácil y rápidamente. A continuación encontrarás una tabla que contiene algunos snippets y su contenido.
 <table>
     <thead>
       <tr>
@@ -78,6 +78,7 @@ La extensión viene acompañada de algunos snippets que pueden ayudarte a escrib
             <td><code>ingresar</code></td>
             <td>Función Ingresar</td>
         </tr>
+        
     </tbody>
   </table>
 
