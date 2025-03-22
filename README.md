@@ -99,9 +99,6 @@ Muestra visualmente dónde comienzan y terminan los bloques de código, como SI,
 
 ![image](https://github.com/notsnakesilent/EPAHighlighter/assets/69158149/b5e8ea2a-6c9c-4a91-9dbf-38004db0e305)
 
-## Help Mode (Comenta y da una definicion sobre cada funcion)
-
-![356783763-444bd517-54f1-4f81-8e7d-d0686c1856d3](https://github.com/user-attachments/assets/91a5a26b-0583-493d-81bd-1b8f911dd781)
 
 
 ## Agradecimientos

@@ -16,23 +16,6 @@
         ],
         "description": "Estructura general de un algoritmo."
     },
-    "subalgoritmo-structure": {
-        "prefix": "subalgoritmo",
-        "body": [
-            "SUBALGORITMO ${1:Nombre}(${2:parametros})",
-            "$0",
-            "CONST",
-            "$0",
-            "TIPOS",
-            "$0",
-            "VAR",
-            "$0",
-            "INICIO",
-            "$0",
-            "FIN"
-        ],
-        "description": "Estructura general de un Subalgoritmo."
-    },
     "procedimiento-structure": {
         "prefix": "procedimiento",
         "body": [

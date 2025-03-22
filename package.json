@@ -2,7 +2,7 @@
   "name": "EPAHighlighter",
   "displayName": "EPAHighlighter",
   "description": "Extension de VSCode para dar sintaxis , inclusion de snippets, un checkeo de errores simple y determinacion de bloques para Pseudocódigo según los estándares de la UNPSJB",
-  "version": "2.0.1",
+  "version": "2.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/notsnakesilent/EPAHighlighter"
@@ -18,7 +18,7 @@
   "author": "Brian Walker",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.10.0"
+   "vscode": "^1.98.0"
   },
   "categories": [
     "Other"
@@ -35,67 +35,67 @@
         "category": "Tools"
       },
       {
-        "command": "extension.helpmode",
-        "title": "Enable Help Mode"
-    }
-    ],
-    "configuration": {
-      "type": "object",
-      "properties": {
-          "extension.helpmode": {
-              "type": "boolean",
-              "default": true,
-              "description": "Mostrar comentario en los snippets"
-          }
-      }
-  },
-    "languages": [
-      {
-        "id": "epa",
-        "aliases": [
-          "EPA"
-        ],
-        "extensions": [
-          ".epa",
-          ".pseudo"
-        ],
-        "configuration": "./assets/language-configuration.json"
+        "command": "extension.version_one",
+        "title": "Pseudocodigo Version 1 (EPA)",
+        "category": "Version"
       },
       {
-        "id": "epah",
-        "aliases": [
-          "EPAh"
-        ],
-        "extensions": [
-          ".epah",
-          ".pseudoh"
-        ],
-        "configuration": "./assets/language-configuration.json"
+        "command": "extension.version_two",
+        "title": "Pseudocodigo Version 2 (AyP I)",
+        "category": "Version"
+      },
+      {
+        "command": "extension.version_three",
+        "title": "Pseudocodigo Version 3 (AyP II)",
+        "category": "Version"
+      },
+      {
+        "command": "extension.showVersionOptions",
+        "title": "Seleccionar modo de pseudocódigo",
+        "category": "Version"
       }
     ],
+    "configuration": {
+      "title": "EPA Highlighter",
+      "type": "object",
+      "properties": {
+        "epaHighlighter.version": {
+          "type": "number",
+          "default": 1,
+          "enum": [
+            1,
+            2
+          ],
+          "enumDescriptions": [
+            "Pseudocodigo Version 1 (EPA)",
+            "Pseudocodigo Version 2 (AyP I)",
+            "Pseudocodigo Version 3 (AyP II)"
+          ],
+          "description": "Versión de pseudocódigo a utilizar"
+        }
+      }
+    },
+"languages": [
+  {
+    "id": "epa",
+    "aliases": ["EPA"],
+    "extensions": [".epa", ".pseudo"],
+    "configuration": "./assets/language-configuration.json"
+  }
+],
     "grammars": [
       {
         "language": "epa",
         "scopeName": "source.epa",
         "path": "./assets/grammar.json"
-      }, 
-      
-      {
-        "language": "epah",
-        "scopeName": "source.epa",
-        "path": "./assets/grammar.json"
       }
     ],
-    "snippets": [
-      {
-        "language": "epa",
-        "path": "./assets/snippets/default.json"
-      },
-      {
-        "language": "epah",
-        "path": "./assets/snippets/helpmode.json"
-      }
-    ]
+   "snippets": [
+  {
+    "language": "epa",
+    "path": "./assets/snippets/active-snippets.json"
+  }
+]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -103,17 +103,22 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "preinstall": "npx npm-force-resolutions"
   },
   "devDependencies": {
-    "@types/vscode": "^1.10.0",
-    "@types/mocha": "^10.0.6",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "18.x",
+    "@types/vscode": "^1.98.0",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
-    "eslint": "^8.57.0",
-    "typescript": "^5.4.5",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.3.9"
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "glob": "^7.2.0",
+    "minimatch": "^3.0.4",
+    "npm-force-resolutions": "^0.0.10",
+    "typescript": "^5.4.5"
   }
 }

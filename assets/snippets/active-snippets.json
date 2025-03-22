@@ -1,0 +1,279 @@
+{
+    "algoritmo-structure": {
+        "prefix": "algoritmo",
+        "body": [
+            "ALGORITMO ${1:Nombre}",
+            "$0",
+            "CONST",
+            "$0",
+            "TIPOS",
+            "$0",
+            "VAR",
+            "$0",
+            "INICIO",
+            "$0",
+            "FIN"
+        ],
+        "description": "Estructura general de un algoritmo."
+    },
+    "procedimiento-structure": {
+        "prefix": "procedimiento",
+        "body": [
+            "Procedimiento ${1:Nombre}(E ${2:parametros_de_entrada}; S ${2:valores_de_salida})",
+            "(*",
+            "Que hace: ---",
+            "Pre: ---",
+            "Pos: ---",
+            "Excepciones: ---",
+            "*)",
+            "CONST",
+            "$0",
+            "TIPOS",
+            "$0",
+            "VAR",
+            "$0",
+            "INICIO",
+            "$0",
+            "FIN"
+        ],
+        "description": "Estructura general de un Procedimiento."
+    },
+    "funcion-structure": {
+        "prefix": "funcion",
+        "body": [
+            "Funcion ${1:Nombre}(E ${2:parametros_de_entrada}): ${3:tipo_de_valor_que_devuelve}",
+            "(*",
+            "Que hace: ---",
+            "Pre: ---",
+            "Pos: ---",
+            "Excepciones: ---",
+            "*)",
+            "CONST",
+            "$0",
+            "TIPOS",
+            "$0",
+            "VAR",
+            "$0",
+            "INICIO",
+            "$0",
+            "FIN"
+        ],
+        "description": "Estructura general de una Funcion."
+    },
+    "si-block": {
+        "prefix": "si",
+        "body": [
+            "Si (${1:condicion}) entonces",
+            "$0",
+            "FinSi"
+        ],
+        "description": "Bloque Sí"
+    },
+    "sino-block": {
+        "prefix": "sisino",
+        "body": [
+            "Si (${1:condicion}) entonces",
+            "$0",
+            "Sino",
+            "$0",
+            "FinSi"
+        ],
+        "description": "Bloque Si con Sino"
+    },
+    "segun-block": {
+        "prefix": "segun",
+        "body": [
+            "Según (${1:variable}) hacer",
+            "$0",
+            "Fin Según"
+        ],
+        "description": "Bloque Según"
+    },
+    "mientras-block": {
+        "prefix": "mientras",
+        "body": [
+            "Mientras (${1:condicion}) hacer",
+            "$0",
+            "Fin Mientras"
+        ],
+        "description": "Bloque mientras"
+    },
+    "desde-block": {
+        "prefix": "desde",
+        "body": [
+            "Desde ${1:variable} <- ${2:valor} hasta ${4:variable} con paso 1 hacer",
+            "$0",
+            "Fin Desde"
+        ],
+        "description": "Bloque desde"
+    },
+    "repetir-block": {
+        "prefix": "repetir",
+        "body": [
+            "Repetir",
+            "$0",
+            "Hasta (${1:condicion})"
+        ],
+        "description": "Bloque repetir"
+    },
+    "mostrar-function": {
+        "prefix": "mostrar",
+        "body": "Mostrar(${1:mensaje})",
+        "description": "Función para mostrar un mensaje"
+    },
+    "ingresar-function": {
+        "prefix": "ingresar",
+        "body": "Ingresar(${1:variable})",
+        "description": "Función Ingresar"
+    },
+    "listaEnteros-function": {
+        "prefix": "arreglo",
+        "body": "arreglo [${1:variable}] de enteros",
+        "description": "Función Arreglo (Lista)"
+    },
+    "listaReales-function": {
+        "prefix": "arreglo",
+        "body": "arreglo [${1:variable}] de real",
+        "description": "Función Arreglo (Lista)"
+    },
+    "concatena-function": {
+        "prefix": "concatena",
+        "body": "concatena(${1:variable} ,${1:variable})",
+        "description": "Función Concatenar"
+    },
+    "long-function": {
+        "prefix": "Long",
+        "body": "Long(${1:variable})",
+        "description": "Función Long"
+    },
+    "str-function": {
+        "prefix": "str",
+        "body": "str(${1:variable})",
+        "description": "Función Str"
+    },
+    "val-function": {
+        "prefix": "val",
+        "body": "val(${1:variable})",
+        "description": "Función Val"
+    },
+    "subcadena-function": {
+        "prefix": "subcadena",
+        "body": "Subcadena(${1:variable} ,${Indice} ,${FinIndice})",
+        "description": "Función Subcadena"
+    },
+    "buscar-function": {
+        "prefix": "buscar",
+        "body": "Buscar(${1:cadenaFuente} ,${cadena})",
+        "description": "Función Buscar"
+    },
+    "reemplazar-function": {
+        "prefix": "reemplazar",
+        "body": "Reemplazar(${1:cadenaFuente} ,${queReemplazar} ,${conqueReemplazar})",
+        "description": "Función Reemplazar"
+    },
+    "insertar-function": {
+        "prefix": "insertar",
+        "body": "Insertar(${1:cadenaFuente} ,${posicion} ,${cadena})",
+        "description": "Función Insertar"
+    },
+    "registro-function": {
+        "prefix": "registro",
+        "body": [
+            "Registro",
+            "campo1: <tipo>",
+            "Fin Registro"
+        ],
+        "description": "Función Registro"
+    },
+    "creararchivo-function": {
+        "prefix": "crear",
+        "body": "Crear(${1:miArchivo} ,${nombre})",
+
+        "description": "Función Crear Archivo"
+    },
+    "abrirarchivo-function": {
+        "prefix": "abrir",
+        "body": "Abrir(${1:miArchivo} ,${nombre})",
+
+        "description": "Función Abrir Archivo"
+    },
+    "anexararchivo-function": {
+        "prefix": "anexar",
+        "body": "Anexar(${1:miArchivo} ,${nombre})",
+
+        "description": "Función Anexar Archivo"
+    },
+    "cerrararchivo-function": {
+        "prefix": "cerrar",
+        "body": "Cerrar(${1:miArchivo})",
+
+        "description": "Función Cerrar Archivo"
+    },
+    "leerarchivoelemento-function": {
+        "prefix": "leer",
+        "body": "Leer(${1:miArchivo}, ${1:s})",
+
+        "description": "Función Leer Elemento de Archivo"
+    },
+    "leerlnarchivoelemento-function": {
+        "prefix": "leerln",
+        "body": "LeerLN(${1:miArchivo}, ${1:s})",
+
+        "description": "Función Leer Linea Archivo"
+    },
+    "escribirarchivo-function": {
+        "prefix": "escribir",
+        "body": "Escribir(${1:miArchivo}, ${1:s})",
+
+        "description": "Función Escribir Archivo"
+    },
+    "escribirlnarchivo-function": {
+        "prefix": "escribir",
+        "body": "Escribir(${1:miArchivo}, ${1:s})",
+
+        "description": "Función Escribir Linea Archivo"
+    },
+    "esfinarchivo-function": {
+        "prefix": "esfinarchivo",
+        "body": "esFinArchivo(${1:miArchivo})",
+
+        "description": "Función Es Fin Archivo"
+    },
+    "poscionarse-function": {
+        "prefix": "poscionarse",
+        "body": "Posicionarse(${1:miArchivo}, ${1:pos})",
+
+        "description": "Función Poscionarse Archivo"
+    },
+    "dondeestoy-function": {
+        "prefix": "dondeestoy",
+        "body": "DondeEstoy(${1:miArchivo})",
+
+        "description": "Función Donde Estoy Archivo"
+    },
+    "tamaño-function": {
+        "prefix": "tamaño",
+        "body": "Tamaño(${1:miArchivo})",
+
+        "description": "Función Tamaño Archivo"
+    },
+    "existearchivo-function": {
+        "prefix": "existearchivo",
+        "body": "ExisteArchivo(${1:miArchivo})",
+
+        "description": "Función Existe Archivo"
+    },
+    "BorrarArchivo-function": {
+        "prefix": "borrararchivo",
+        "body": "BorrarArchivo(${1:miArchivo})",
+
+        "description": "Función Borrar Archivo"
+    },
+    "renomarchivo-function": {
+        "prefix": "renombrararchivo",
+        "body": "RenombrarArchivo(${1:miArchivo},${1:nuevoNombre})",
+
+        "description": "Función Renombrar Archivo"
+    }
+}
+

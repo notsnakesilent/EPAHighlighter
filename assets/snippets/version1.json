@@ -6,6 +6,8 @@
             "$0",
             "CONST",
             "$0",
+            "TIPOS",
+            "$0",
             "VAR",
             "$0",
             "INICIO",
@@ -20,6 +22,8 @@
             "SUBALGORITMO ${1:Nombre}(${2:parametros})",
             "$0",
             "CONST",
+            "$0",
+            "TIPOS",
             "$0",
             "VAR",
             "$0",
@@ -40,6 +44,8 @@
             "*)",
             "CONST",
             "$0",
+            "TIPOS",
+            "$0",
             "VAR",
             "$0",
             "INICIO",
@@ -58,6 +64,8 @@
             "Pos: ---",
             "*)",
             "CONST",
+            "$0",
+            "TIPOS",
             "$0",
             "VAR",
             "$0",
@@ -132,5 +140,11 @@
         "prefix": "ingresar",
         "body": "Ingresar(${1:variable})",
         "description": "Función Ingresar"
+    },
+    "listaEnteros-function": {
+        "prefix": "arreglo",
+        "body": "arreglo [${1:variable}] de enteros",
+        "description": "Función Arreglo (Lista)"
     }
 }
+
