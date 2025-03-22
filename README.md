@@ -13,7 +13,7 @@ La extensión para Visual Studio Code "EPAHighlighter" está diseñada para brin
 En resumen, esta extensión está diseñada para mejorar la experiencia de desarrollo al trabajar con Pseudocódigo en Visual Studio Code, proporcionando herramientas útiles para escribir, editar y depurar código de manera más eficiente y efectiva.
 
 ## Instalación
-Via marketplace (https://marketplace.visualstudio.com/items?itemName=BrianWalker.EPAHighlighter)
+[VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=BrianWalker.EPAHighlighter)
 
 ## Uso
 Se deben utilizar archivos con extension ".epa/.epah/.pseudo/.pseudoh" si no la extension no se activara
